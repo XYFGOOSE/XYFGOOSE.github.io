@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>相对论动态仿真实验</title>
+    <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            position: relative;
+            /* 为了定位返回按钮 */
+        }
+
+        h1 {
+            text-align: center;
+            color: #0073e6;
+        }
+
+        .module {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        #graph {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        #animationCanvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            border-radius: 8px;
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .input-group span {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #01579b;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #0277bd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
+        <h1>相对论动态仿真实验</h1>
+
+        <!-- 实验引导模块 -->
+        <div class="module" id="intro">
+            <h2>实验引导</h2>
+            <p>本实验旨在演示狭义相对论的基本原理。您可以调整参数并观察结果如何变化。</p>
+            <p>相关物理知识普及：狭义相对论是爱因斯坦于1905年提出的，它描述了高速运动物体的行为。在高速运动下，时间会变慢，长度会缩短，这些效应称为时间延缓和长度收缩。</p>
+        </div>
+
+        <!-- 参数调整模块 -->
+        <div class="module" id="parameters">
+            <h2>参数调整</h2>
+            <form id="parameterForm">
+                <label for="velocity">速度 (相对于光速的百分比): </label>
+                <div class="input-group">
+                    <input type="number" id="velocity" name="velocity" min="0" max="99" step="1" value="50">
+                    <span>%</span>
+                </div>
+                <label for="time">观察时间 (秒): </label>
+                <div class="input-group">
+                    <input type="number" id="time" name="time" min="0" step="1" value="10">
+                    <span>秒</span>
+                </div>
+                <div class="button-group">
+                    <button type="button" onclick="runExperiment()">开始实验</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 结果展示模块 -->
+        <div class="module" id="results">
+            <h2>实验结果</h2>
+            <div id="resultOutput">
+                <!-- 结果将展示在这里 -->
+            </div>
+            <div id="graph"></div>
+            <div id="animation"><canvas id="animationCanvas" width="800" height="200"></canvas></div>
+
+        </div>
+    </div>
+
+    <script src="../js/relativityjs/plotly-latest.min.js"></script>
+    <script>
+        let animationFrameId;
+        let paused = true;
+        const c = 299792458; // 光速，单位 m/s
+        let velocity;
+        let gamma;
+        let timeDilated;
+
+        function runExperiment() {
+            cancelAnimationFrame(animationFrameId); // 清除之前的动画循环
+            let velocityPercent = document.getElementById('velocity').value;
+            let time = document.getElementById('time').value;
+
+            velocity = (velocityPercent / 100) * c;
+
+            // 计算相对论效应
+            gamma = 1 / Math.sqrt(1 - (velocity * velocity) / (c * c));
+            timeDilated = time * gamma;
+
+            // 显示结果
+            let resultOutput = document.getElementById('resultOutput');
+            resultOutput.innerHTML = `
+                <p>速度: ${velocityPercent}% 光速 (${velocity.toFixed(2)} m/s)</p>
+                <p>观察时间: ${time} 秒</p>
+                <p>相对论效应因子 (γ): ${gamma.toFixed(2)}</p>
+                <p>经过的时间 (在静止参考系中): ${timeDilated.toFixed(2)} 秒</p>
+            `;
+
+            // 绘制坐标轴
+            drawGraph(gamma, time);
+
+            // 初始化飞船动画
+            initAnimation();
+            paused = false;
+            animate();
+        }
+
+        function drawGraph(gamma, time) {
+            let x = [];
+            let y = [];
+            for (let t = 0; t <= time; t++) {
+                x.push(t);
+                y.push(t * gamma);
+            }
+
+            var trace = {
+                x: x,
+                y: y,
+                mode: 'lines',
+                type: 'scatter'
+            };
+
+            var layout = {
+                title: '时间延缓效应',
+                xaxis: {
+                    title: '静止参考系中的时间 (秒)'
+                },
+                yaxis: {
+                    title: '移动参考系中的时间 (秒)'
+                }
+            };
+
+            Plotly.newPlot('graph', [trace], layout);
+        }
+
+        // 飞船动画部分
+        let canvas, ctx;
+        let spaceship = {
+            x: 0,
+            y: 100,
+            width: 100,
+            height: 50,
+            velocityX: 0
+        };
+
+        function initAnimation() {
+            canvas = document.getElementById('animationCanvas');
+            ctx = canvas.getContext('2d');
+            spaceship.x = 0;
+            spaceship.velocityX = (velocity / c) * 10; // 动画速度调整因子
+            drawSpaceship();
+        }
+
+        function drawSpaceship() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'blue';
+            let contractedWidth = spaceship.width / gamma;
+            ctx.fillRect(spaceship.x, spaceship.y - spaceship.height / 2, contractedWidth, spaceship.height);
+        }
+
+        function animate() {
+            if (!paused) {
+                spaceship.x += spaceship.velocityX;
+                if (spaceship.x > canvas.width) {
+                    spaceship.x = 0; // 循环
+                }
+                drawSpaceship();
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        }
+    </script>
+</body>
+
+</html>

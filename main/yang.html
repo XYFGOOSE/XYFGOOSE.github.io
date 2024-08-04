@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杨氏双缝干涉实验模拟</title>
+    <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative; /* 为了定位返回按钮 */
+        }
+        canvas {
+            border: 1px solid black;
+            margin-top: 10px;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+        }
+        .sidebar {
+            width: 300px;
+            margin-left: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #01579b;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #0277bd;
+        }
+    </style>
+    <script src="../js/yangjs/chart.js"></script>
+</head>
+<body>
+    <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
+    <div class="main-content">
+        <h1>杨氏双缝干涉实验模拟</h1>
+        <div class="controls">
+            <div class="control-group">
+                <label>缝宽(d): <input type="number" id="slitWidth" value="0.1" step="0.01"> mm</label>
+            </div>
+            <div class="control-group">
+                <label>屏距(D): <input type="number" id="screenDistance" value="1" step="0.1"> m</label>
+            </div>
+            <div class="control-group">
+                <label>入射光波长(λ): <input type="number" id="wavelength" value="660" step="10"> nm</label>
+            </div>
+            <div class="control-group">
+                <button onclick="startExperiment()">开始实验</button>
+            </div>
+        </div>
+        <canvas id="interferenceCanvas" width="800" height="200"></canvas>
+        <div class="chart-container">
+            <canvas id="intensityChartCanvas"></canvas>
+        </div>
+    </div>
+    <div class="sidebar">
+        <h2>实验简介与操作指南</h2>
+        <p>杨氏双缝干涉实验展示了光的波动性。光通过两个狭缝后形成相干光波，这些光波在屏幕上叠加形成干涉条纹。明暗条纹的分布由光波的相位差决定。</p>
+        <p>操作步骤：</p>
+        <ol>
+            <li>调整缝宽(d)，屏距(D)，和入射光波长(λ)。</li>
+            <li>点击“开始实验”按钮，观察屏幕上的干涉条纹和强度分布图。</li>
+            <li>通过改变参数，观察条纹和强度分布的变化。</li>
+        </ol>
+        <h3>参数说明</h3>
+        <ul>
+            <li><strong>缝宽(d)</strong>：两个狭缝之间的距离。</li>
+            <li><strong>屏距(D)</strong>：狭缝到屏幕的距离。</li>
+            <li><strong>入射光波长(λ)</strong>：入射光的波长。</li>
+        </ul>
+    </div>
+
+    <script>
+        let intensityChart;
+
+        function startExperiment() {
+            const slitWidth = document.getElementById('slitWidth').value;
+            const screenDistance = document.getElementById('screenDistance').value;
+            const wavelength = document.getElementById('wavelength').value;
+
+            const data = calculateIntensity(slitWidth, screenDistance, wavelength);
+            drawInterferencePattern(data);
+            drawIntensityChart(data);
+        }
+
+        function calculateIntensity(slitWidth, screenDistance, wavelength) {
+            const scale = 10;
+            const lambda = wavelength * 1e-9;
+            const d = slitWidth * 1e-3;
+            const D = screenDistance;
+            const k = 2 * Math.PI / lambda;
+
+            const data = [];
+            const labels = [];
+            let maxIntensity = 0;
+
+            for (let x = 0; x < 800; x++) { // 调整x轴范围，使图表大小适中
+                const X = (x - 800 / 2) * 1e-6 * scale;
+                const delta = (d * X) / D;
+                const intensity = Math.cos(k * delta) ** 2;
+                data.push({ intensity, x });
+                labels.push((X * 1e6).toFixed(2));
+                if (intensity > maxIntensity) {
+                    maxIntensity = intensity;
+                }
+            }
+
+            return { data, labels, maxIntensity };
+        }
+
+        function drawInterferencePattern({ data }) {
+            const canvas = document.getElementById('interferenceCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            data.forEach(point => {
+                const brightness = Math.floor(point.intensity * 255);
+                ctx.fillStyle = `rgb(${brightness}, 0, 0)`;
+                ctx.fillRect(point.x, 0, 1, canvas.height);
+            });
+        }
+
+        function drawIntensityChart({ data, labels, maxIntensity }) {
+            const ctx = document.getElementById('intensityChartCanvas').getContext('2d');
+
+            const chartData = data.map(point => point.intensity);
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '强度分布',
+                        data: chartData,
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                        fill: true,
+                        tension: 0.1,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '位置 (μm)'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '强度'
+                            },
+                            beginAtZero: true,
+                            suggestedMax: maxIntensity, // 动态调整y轴范围
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    animation: {
+                        duration: 0
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            };
+
+            if (intensityChart) {
+                intensityChart.destroy();
+            }
+
+            intensityChart = new Chart(ctx, chartConfig);
+        }
+
+        // 初始实验启动
+        startExperiment();
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理仿真教学演示平台</title>
+    <link rel="stylesheet" href="css/indexcss1/bootstrap.min.css">
+    <link rel="stylesheet" href="css/indexcss1/all.min.css">
+    <link rel="stylesheet" href="css/indexcss1/main.css">
+    <script src="js/indexjs/axios.min.js"></script>
+    <script src="js/indexjs/auth.js" defer></script>
+    <link rel="icon" href="./assets/icon.svg" type="image/x-icon" />
+</head>
+<body>
+    <div class="menu-btn">
+        <i class="fas fa-bars fa-2x"></i>
+    </div>
+    <div class="container">
+        <nav class="main-nav">
+            <img src="img/indeximges/logo.png" alt="Microsoft logo" class="logo">
+            <ul class="main-menu">
+                <li> <a href="index.html">首页</a></li>
+                <li><a href="基于HTML5的物理仿真演示平台.pdf">实验介绍</a></li>
+                <li><a href="https://github.com/d1swen/Physics" target="_blank">开源地址</a></li>
+                <li><a href="#" target="_blank" onclick="showAlert()">联系我们</a></li>
+                <li><a href="#" id="login-btn" onclick="toggleLoginPopup()"><i class="fas fa-user"></i> 登录</a></li>
+<!-- 登录弹出框 -->
+<div id="login-popup" class="login-popup">
+    <div class="login-popup-content">
+        <span class="close-btn" onclick="toggleLoginPopup()">&times;</span>
+        <h2>登录</h2>
+        <form>
+            <p style="color: #888;">提示：账号和密码均为学号</p>
+            <label for="username">账号:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">登录</button>
+        </form>
+    </div>
+</div>
+
+
+            </ul>
+        </nav>
+            <header class="showcase">
+                <h2>探索物理的奥秘</h2>
+                <p>在这里体验物理科学的无限可能</p>
+                <a href="main/box.html" class="btn"> 合 集 <i class="fas fa-chevron-right"></i></a>
+            </header>
+            
+        </header>
+
+        <section class="home-cards">
+            <div>
+                <img src="img/indeximges/card1.webp" alt="">
+                <h3>力学</h3>
+                <p>模拟物体在受力条件下运动行为的力学仿真工具，含有天体运动、抛体运动等。</p>
+                <a href="#" class="learn-more-btn" data-target="learn-more-1">Learn More <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div>
+                <img src="img/indeximges/card2.webp" alt="">
+                <h3>热学</h3>
+                <p>模拟物体在不同温度条件下热行为的热学仿真工具，含有气体分子运动、黑体辐射等。</p>
+                <a href="#" class="learn-more-btn" data-target="learn-more-2">Learn More <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div>
+                <img src="img/indeximges/card3.webp" alt="">
+                <h3>光学</h3>
+                <p>模拟光线传播和光学现象的光学仿真工具，含有光路仿真、杨氏双缝干涉等。</p>
+                <a href="#" class="learn-more-btn" data-target="learn-more-3">Learn More <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div>
+                <img src="img/indeximges/card4.webp" alt="">
+                <h3>电磁学</h3>
+                <p>模拟电场、磁场及电路的电磁学仿真工具，含有粒子电场运动、rc放大电路等。</p>
+                <a href="#" class="learn-more-btn" data-target="learn-more-4">Learn More <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div>
+                <img src="img/indeximges/card5.webp" alt="">
+                <h3>其他</h3>
+                <p>其他类别的仿真教学工具，含有相对论效应仿真教学演示、xxx等。</p>
+                <a href="#" class="learn-more-btn" data-target="learn-more-5">Learn More <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </section>
+
+        <div id="learn-more-1" class="learn-more-popup">
+            <p>力学</p>
+            <a href="main/orbital.html" target="_blank" class="btn">天体运动</a>
+            <a href="main/paoti.html" target="_blank" class="btn">抛体运动</a>
+            <a href="main/pendulum_gravity_experiment.html" target="_blank" class="btn">单摆运动</a>
+        </div>
+        <div id="learn-more-2" class="learn-more-popup">
+            <p>热学</p>
+            <a href="main/g.html" target="_blank" class="btn">气体分子运动</a>
+            <a href="main/Yang_heat_conduction.html" target="_blank" class="btn">黑体辐射</a>
+        </div>
+        <div id="learn-more-3" class="learn-more-popup">
+            <p>光学</p>
+            <a href="main/yang.html" target="_blank" class="btn">杨氏双缝干涉</a>
+            <a href="main/light.html" target="_blank" class="btn">光路演示</a>
+        </div>
+        <div id="learn-more-4" class="learn-more-popup">
+            <p>电磁学</p>
+            <a href="main/RC.html" target="_blank" class="btn">RC耦合放大电路</a>
+            <a href="main/EH.html" target="_blank" class="btn">粒子电场运动</a>
+            <a href="main/q.html" target="_blank" class="btn">电场线演示</a>
+        </div>
+        <div id="learn-more-5" class="learn-more-popup">
+            <p>其他</p>
+            <a href="main/relativity.html" target="_blank" class="btn">相对论演示</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div><i class="fas fa-globe fa-2x"></i> Simplified Chinese（China）</div>
+            <ul>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#">&copy; 物理仿真教学演示平台</a></li>
+            </ul>
+        </div>
+    </footer>
+    <script>
+        function toggleLoginPopup() {
+            var loginPopup = document.getElementById("login-popup");
+            if (loginPopup.style.display === "block") {
+                loginPopup.style.display = "none";
+            } else {
+                loginPopup.style.display = "block";
+            }
+        }
+        </script>
+        
+    <script>
+        function showAlert() {
+            alert('telphone: 18754822869');
+        }
+    </script>    
+    <script src="js/indexjs/script.js"></script>
+</body>
+</html>
