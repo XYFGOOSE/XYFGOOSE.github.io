@@ -220,16 +220,6 @@ ul {
 }
 
 /* Footer */
-.footer {
-    position: absolute; /* 或者 fixed */
-    bottom: 0;
-    width: 100%;
-    background-color: var(--grey); /* 保持现有的背景颜色 */
-    color: var(--lightblack); /* 保持现有的字体颜色 */
-    font-size: 12px;
-    padding: 20px 0;
-}
-
 .footer-inner {
   max-width: 10%;
   margin: 0 auto;
