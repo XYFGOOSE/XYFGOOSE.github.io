@@ -1,0 +1,69 @@
+   <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>粒子电场实验仿真</title>
+        <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
+        <link rel="stylesheet" href="../css/EHCSS/EH.css">
+        <script src="../js/EHjs/script.js"></script>
+        <script src="../js/EHjs/matter.min.js"></script>
+    </head>
+    <body>
+        <div class="sidebar">
+            <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
+            <div class="form-container">
+                <h2>实验设置</h2>
+                <div class="form-row">
+                    <label for="chrg">电荷 (C)</label>
+                    <input type="text" id="chrg" value="-1">
+                </div>
+                <div class="form-row">
+                    <label for="mass">质量 (kg)</label>
+                    <input type="text" id="mass" value="10">
+                </div>
+                <div class="form-row">
+                    <label for="efld">电场强度 (N/C)</label>
+                    <input type="text" id="efld" value="0.01">
+                </div>
+                <div class="form-row">
+                    <label for="direction">电场方向</label>
+                    <select id="direction">
+                        <option value="up">向上</option>
+                        <option value="down">向下</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="vel">初速度 (m/s)</label>
+                    <input type="text" id="vel" value="15">
+                </div>
+                <button type="button" onClick="project()">开始仿真</button>
+            </div>
+            <div class="info">
+                <h2>实验简介与操作指南</h2>
+                <p>本实验模拟了带电粒子在均匀电场中的运动。您可以设置电荷、质量、电场强度、初速度和电场方向，并观察粒子的运动轨迹。</p>
+                <p>操作步骤：</p>
+                <ol>
+                    <li>设置电荷、质量、电场强度、初速度和电场方向。</li>
+                    <li>点击“开始仿真”按钮，观察粒子的运动轨迹。</li>
+                </ol>
+                <h2>参数说明</h2>
+                <ul>
+                    <li><strong>电荷：</strong>粒子的电荷量，单位为库仑 (C)。</li>
+                    <li><strong>质量：</strong>粒子的质量，单位为千克 (kg)。</li>
+                    <li><strong>电场强度：</strong>电场的强度，单位为牛顿每库仑 (N/C)。</li>
+                    <li><strong>电场方向：</strong>电场的方向，可选择向上或向下。</li>
+                    <li><strong>初速度：</strong>粒子的初始速度，单位为米每秒 (m/s)。</li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1><b>粒子电场实验仿真</b></h1>
+                <h2><b>带电粒子在均匀电场中的运动</b></h2>
+            </div>
+            <div id="renderport"></div>
+        </div>
+    </body>
+    </html>
+    

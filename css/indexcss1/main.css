@@ -219,16 +219,26 @@ ul {
   margin-left: 10px;
 }
 
-/* Footer */
-.footer {
-    position: absolute; /* 或者 fixed */
-    bottom: 0;
-    width: 100%;
-    background-color: var(--grey); /* 保持现有的背景颜色 */
-    color: var(--lightblack); /* 保持现有的字体颜色 */
-    font-size: 12px;
-    padding: 20px 0;
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
+
+.container {
+  flex: 1;
+}
+
+.footer {
+  background-color: var(--grey);
+  color: var(--lightblack);
+  font-size: 12px;
+  padding: 20px 0;
+  width: 100%;
+}
+
 
 .footer-inner {
   max-width: 10%;

@@ -1,0 +1,78 @@
+body {
+  .container {
+    max-width: 1200px;
+    margin: 20px auto;
+  }
+
+  .experiment-info {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .bode-plot {
+    width: 800px;
+    /* 固定波特图宽度 */
+    height: 450px;
+    /* 固定波特图高度 */
+    margin-bottom: 20px;
+  }
+
+  .circuit-diagram {
+    text-align: center;
+  }
+
+  .circuit-diagram img {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #01579b;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .back-button:hover {
+    background-color: #0277bd;
+  }
+    }
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 10px;
+    }
+  
+    .back-button {
+      top: 5px;
+      left: 5px;
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  
+    .bode-plot {
+      width: 100%;
+      height: auto;
+    }
+  
+    .circuit-diagram img {
+      max-width: 100%;
+    }
+  
+    .card-body {
+      padding: 10px;
+    }
+  
+    .form-control,
+    .btn {
+      width: 100%;
+      font-size: 14px;
+    }
+  }
+  

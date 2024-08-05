@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑体辐射仿真软件</title>
+    <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
+    <link href="../css/heatcss/heat.css" rel="stylesheet">
+    <script src="../js/Yang_heat_conductionjs/echarts.min.js"></script>
+    <script src="../js/Yang_heat_conductionjs/"></script>
+</head>
+
+<body>
+    <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
+    <h1>黑体辐射仿真软件</h1>
+    <div id="controls">
+        <label for="temperature">温度 (K): </label>
+        <input type="range" id="temperature" min="100" max="10000" value="3000" step="100">
+        <input type="number" id="tempInput" min="100" max="10000" value="3000" step="100">
+        <span id="tempValue">3000 K</span>
+    </div>
+    <div id="chart"></div>
+    <div id="info">
+        <h2>黑体辐射</h2>
+        <p>黑体辐射是指理想化黑体在各个频率下的辐射强度，完全由黑体的温度决定。根据普朗克定律，黑体在特定温度下的辐射光谱可以用公式描述。</p>
+        <p>可见光区位于400 nm到700 nm之间，紫外光区位于400 nm以下，而红外光区则位于700 nm以上。在高温下，黑体辐射的峰值波长会移向较短波长区域。</p>
+    </div>
+    <script src="../js/Yang_heat_conductionjs/heat.js"></script>
+</body>
+
+</html>

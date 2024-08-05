@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>相对论动态仿真实验</title>
+    <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
+    <link href="../css/R/R.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
+        <h1>相对论动态仿真实验</h1>
+
+        <!-- 实验引导模块 -->
+        <div class="module" id="intro">
+            <h2>实验引导</h2>
+            <p>本实验旨在演示狭义相对论的基本原理。您可以调整参数并观察结果如何变化。</p>
+            <p>相关物理知识普及：狭义相对论是爱因斯坦于1905年提出的，它描述了高速运动物体的行为。在高速运动下，时间会变慢，长度会缩短，这些效应称为时间延缓和长度收缩。</p>
+        </div>
+
+        <!-- 参数调整模块 -->
+        <div class="module" id="parameters">
+            <h2>参数调整</h2>
+            <form id="parameterForm">
+                <label for="velocity">速度 (相对于光速的百分比): </label>
+                <div class="input-group">
+                    <input type="number" id="velocity" name="velocity" min="0" max="99" step="1" value="50">
+                    <span>%</span>
+                </div>
+                <label for="time">观察时间 (秒): </label>
+                <div class="input-group">
+                    <input type="number" id="time" name="time" min="0" step="1" value="10">
+                    <span>秒</span>
+                </div>
+                <div class="button-group">
+                    <button type="button" onclick="runExperiment()">开始实验</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 结果展示模块 -->
+        <div class="module" id="results">
+            <h2>实验结果</h2>
+            <div id="resultOutput">
+                <!-- 结果将展示在这里 -->
+            </div>
+            <div id="graph"></div>
+            <div id="animation"><canvas id="animationCanvas" width="800" height="200"></canvas></div>
+        </div>
+    </div>
+
+    <script src="../js/relativityjs/plotly-latest.min.js"></script>
+    <script src="../js/relativityjs/R.js"></script>
+</body>
+
+</html>

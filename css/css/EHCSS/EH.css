@@ -1,0 +1,182 @@
+body {
+    display: flex;
+    flex-direction: row;
+    background-color: #e0f7fa;
+    color: #0f0f13;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Hind', sans-serif;
+    margin: 0;
+    overflow: hidden;
+}
+.sidebar {
+    width: 25%;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    margin: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.back-button {
+    width: calc(100% - 40px);
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #01579b;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.back-button:hover {
+    background-color: #0277bd;
+}
+.sidebar h2 {
+    font-size: 24px;
+    margin-top: 0;
+    color: #01579b;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-container .form-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.form-container .form-row label {
+    flex: 1;
+    text-align: right;
+    margin-right: 10px;
+}
+.form-container .form-row input,
+.form-container .form-row select {
+    flex: 2;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.form-container button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #01579b;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+.form-container button:hover {
+    background-color: #0277bd;
+}
+.main-content {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+    height: calc(100vh - 20px);
+    overflow-y: auto;
+}
+.main-content .header {
+    text-align: center;
+    width: 100%;
+}
+.main-content .header h1 {
+    font-size: 36px;
+    margin: 0;
+    color: #01579b;
+}
+.main-content .header h2 {
+    font-size: 18px;
+    margin: 0;
+    margin-bottom: 20px;
+    color: #0277bd;
+}
+#renderport {
+    width: 800px;
+    height: 600px;
+    background-color: #0f0f13;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+/* 移动端样式 */
+/* 移动端样式 */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .back-button {
+        width: 100%;
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    .form-container {
+        width: 100%;
+    }
+
+    .form-container .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-container .form-row label {
+        text-align: left;
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .form-container .form-row input,
+    .form-container .form-row select {
+        width: 100%;
+    }
+
+    .form-container button {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 0 10px;
+        margin-top: 10px;
+    }
+
+    .main-content .header h1 {
+        font-size: 28px;
+    }
+
+    .main-content .header h2 {
+        font-size: 16px;
+    }
+
+    #renderport {
+        width: 100%;
+        height: 400px;
+    }
+}
