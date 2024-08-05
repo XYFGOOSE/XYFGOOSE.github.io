@@ -6,42 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>气体分子模拟</title>
   <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
-  <!-- Bootstrap CSS -->
   <link href="../css/gcss/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/gcss/g.css" rel="stylesheet">
   <!-- ECharts -->
   <script src="../js/gjs/echarts.min.js"></script>
-  <!-- Custom CSS -->
-  <style>
-    #simulationCanvas {
-      border: 1px solid #ccc;
-      display: block;
-      margin: auto;
-    }
-
-    #chartContainer {
-      margin-top: 20px;
-      width: 100%;
-      height: 400px;
-    }
-
-    .back-button {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 10px 20px;
-      border: none;
-      background-color: #01579b;
-      color: #fff;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .back-button:hover {
-      background-color: #0277bd;
-    }
-  </style>
+  <!-- Chart.js -->
+  <script src="../js/gjs/Chart.min.js"></script>
 </head>
 
 <body>
@@ -49,264 +19,65 @@
   <div class="container">
     <h1 class="mt-4 mb-4 text-center">气体分子模拟</h1>
     <div class="row">
-      <div class="col-md-6 d-flex justify-content-center">
+      <div class="col-12 col-md-6 d-flex justify-content-center">
         <canvas id="simulationCanvas" width="600" height="400"></canvas>
       </div>
-      <div class="col-md-6">
-        <div class="card">
+      <div class="col-12 col-md-6">
+        <div class="card mt-3 mt-md-0">
           <div class="card-body">
             <h5 class="card-title">模拟控制</h5>
-            <!-- Control for adjusting temperature -->
             <div class="form-group">
               <label for="temperatureInput">温度 (K)</label>
               <input type="number" class="form-control" id="temperatureInput" min="0" max="500" value="300">
             </div>
-            <button id="startButton" class="btn btn-primary">开始模拟</button>
-            <button id="stopButton" class="btn btn-secondary">停止模拟</button>
-            <button id="resetButton" class="btn btn-warning">重置</button>
+            <div class="form-group">
+              <label for="particleCountInput">粒子数量</label>
+              <input type="number" class="form-control" id="particleCountInput" min="1" max="500" value="80">
+            </div>
+            <button id="startButton" class="btn btn-primary mb-2">开始模拟</button>
+            <button id="stopButton" class="btn btn-secondary mb-2">停止模拟</button>
+            <button id="resetButton" class="btn btn-warning mb-2">重置</button>
           </div>
         </div>
-        <div id="chartContainer"></div>
       </div>
     </div>
-    <div class="card mt-4">
-      <div class="card-body">
-        <h5 class="card-title">实验简介</h5>
-        <p>实验引导：本实验旨在模拟气体分子的运动行为，通过调节温度来观察气体分子速度的变化。您可以通过调整温度输入框中的值来设置不同的温度，并点击“开始模拟”按钮开始实验。</p>
-        <p>相关物理知识普及：气体分子的运动符合麦克斯韦-玻尔兹曼分布定律。随着温度的升高，气体分子的平均速度和动能都会增加。本实验中，通过模拟粒子的运动和碰撞，展示气体分子的行为和速度分布。</p>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">粒子速度分布</h5>
+            <canvas id="particleChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">速度分布图</h5>
+            <div id="chartContainer" style="width: 100%; height: 400px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">实验简介</h5>
+            <p>实验引导：本实验旨在模拟气体分子的运动行为，通过调节温度来观察气体分子速度的变化。您可以通过调整温度输入框中的值来设置不同的温度，并点击“开始模拟”按钮开始实验。</p>
+            <p>相关物理知识普及：气体分子的运动符合麦克斯韦-玻尔兹曼分布定律。随着温度的升高，气体分子的平均速度和动能都会增加。本实验中，通过模拟粒子的运动和碰撞，展示气体分子的行为和速度分布。</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS and dependencies -->
   <script src="../js/gjs/jquery-3.5.1.slim.min.js"></script>
   <script src="../js/gjs/popper.min.js"></script>
   <script src="../js/gjs/bootstrap.min.js"></script>
-  <!-- Custom JavaScript -->
-  <script>
-    // Constants
-    const NUM_PARTICLES = 80; // 将粒子数量减少20%
-
-    // Canvas setup
-    const canvas = document.getElementById('simulationCanvas');
-    const ctx = canvas.getContext('2d');
-
-    // Temperature input element
-    const temperatureInput = document.getElementById('temperatureInput');
-
-    // Particle class
-    class Particle {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.velocity = { x: 0, y: 0 }; // 粒子速度对象
-        this.radius = 5; // 粒子半径
-        this.mass = 1; // 粒子质量
-      }
-
-      update(temperature) {
-        // 根据温度调整速度
-        let minVelocity = 0.1;
-        let maxVelocity = 1 + temperature / 100;
-
-        // 随机生成速度，保证初始速度适中
-        if (this.velocity.x === 0 && this.velocity.y === 0) {
-          this.velocity.x = getRandomVelocity(minVelocity, maxVelocity);
-          this.velocity.y = getRandomVelocity(minVelocity, maxVelocity);
-        }
-
-        this.x += this.velocity.x;
-        this.y += this.velocity.y;
-
-        // 处理边界条件
-        if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
-          this.velocity.x = -this.velocity.x;
-        }
-        if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
-          this.velocity.y = -this.velocity.y;
-        }
-
-        // 绘制粒子（示例：圆）
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-
-    // 数组存储粒子
-    let particles = [];
-    let animationId;
-
-    // 初始化粒子
-    function initializeParticles(temperature) {
-      particles = [];
-      for (let i = 0; i < NUM_PARTICLES; i++) {
-        let particle = new Particle(canvas.width * Math.random(), canvas.height * Math.random());
-        particles.push(particle);
-      }
-    }
-
-    // 获取随机速度
-    function getRandomVelocity(min, max) {
-      let sign = Math.random() < 0.5 ? -1 : 1;
-      return sign * (min + Math.random() * (max - min));
-    }
-
-    // 检查并处理粒子之间的碰撞
-    function checkCollisions() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          let p1 = particles[i];
-          let p2 = particles[j];
-          let dx = p2.x - p1.x;
-          let dy = p2.y - p1.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          let minDist = p1.radius + p2.radius;
-
-          if (distance < minDist) {
-            // 交换速度
-            let angle = Math.atan2(dy, dx);
-            let sin = Math.sin(angle);
-            let cos = Math.cos(angle);
-
-            // 旋转粒子位置和速度到碰撞方向
-            let v1 = rotate(p1.velocity, sin, cos, true);
-            let v2 = rotate(p2.velocity, sin, cos, true);
-
-            // 交换速度分量
-            let temp = v1.x;
-            v1.x = v2.x;
-            v2.x = temp;
-
-            // 旋转粒子位置和速度回原来的方向
-            let v1F = rotate(v1, sin, cos, false);
-            let v2F = rotate(v2, sin, cos, false);
-
-            p1.velocity.x = v1F.x;
-            p1.velocity.y = v1F.y;
-            p2.velocity.x = v2F.x;
-            p2.velocity.y = v2F.y;
-          }
-        }
-      }
-    }
-
-    // 旋转速度分量
-    function rotate(velocity, sin, cos, reverse) {
-      return {
-        x: reverse ? velocity.x * cos + velocity.y * sin : velocity.x * cos - velocity.y * sin,
-        y: reverse ? velocity.y * cos - velocity.x * sin : velocity.y * cos + velocity.x * sin
-      };
-    }
-
-    // 生成符合麦克斯韦-玻尔兹曼分布的速率数据
-    function generateMaxwellBoltzmannDistribution(temperature, numBins = 20) {
-      const k = 1.38e-23; // 玻尔兹曼常数 (J/K)
-      const m = 4.65e-26; // 假设分子的质量 (kg) (例如，氮气分子)
-      const factor = Math.sqrt(m / (2 * Math.PI * k * temperature));
-
-      let maxVelocity = 3 * Math.sqrt(k * temperature / m); // 速率范围的上限
-      let binWidth = maxVelocity / numBins;
-
-      let velocities = Array.from({ length: numBins }, (_, i) => i * binWidth + binWidth / 2);
-      let distribution = velocities.map(v => factor * 4 * Math.PI * v ** 2 * Math.exp(-m * v ** 2 / (2 * k * temperature)));
-
-      // 归一化分布，使总面积为1
-      let sum = distribution.reduce((a, b) => a + b, 0);
-      distribution = distribution.map(d => d / sum);
-
-      return velocities.map((v, i) => [v, distribution[i]]);
-    }
-
-    // 更新 ECharts 图表
-    function updateChart(temperature) {
-      // 生成麦克斯韦-玻尔兹曼分布数据
-      let data = generateMaxwellBoltzmannDistribution(temperature);
-
-      // 更新 ECharts 图表
-      let chart = echarts.init(document.getElementById('chartContainer'));
-      let option = {
-        title: {
-          text: '粒子速度分布',
-          subtext: `温度: ${temperature} K`, // 可以尝试将温度值转为字符串并使用模板字符串
-          subtextStyle: {
-            fontSize: '14' // 减小副标题的字体大小
-          },
-          left: 'center' // 将标题居中显示
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
-          }
-        },
-        xAxis: {
-          name: '速度 (m/s)',
-          type: 'value',
-          nameGap: 30 // 增加X轴名称与轴线的距离
-        },
-        yAxis: {
-          name: '概率密度',
-          type: 'value',
-          nameGap: 30 // 增加Y轴名称与轴线的距离
-        },
-        series: [{
-          type: 'line',
-          data: data,
-          smooth: true // 平滑线条
-        }]
-      };
-      chart.setOption(option);
-    }
-
-    // 动画循环
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      let temperature = parseFloat(temperatureInput.value);
-      particles.forEach(particle => {
-        particle.update(temperature);
-      });
-      checkCollisions();
-      animationId = requestAnimationFrame(animate);
-
-      // 更新 ECharts 图表
-      updateChart(temperature);
-    }
-
-    // 事件监听温度输入
-    temperatureInput.addEventListener('input', () => {
-      let temperature = parseFloat(temperatureInput.value);
-      initializeParticles(temperature);
-      updateChart(temperature);
-    });
-
-    // 事件监听
-    document.getElementById('startButton').addEventListener('click', () => {
-      cancelAnimationFrame(animationId); // 清除之前的动画循环
-      let temperature = parseFloat(temperatureInput.value);
-      initializeParticles(temperature);
-      animate();
-    });
-
-    document.getElementById('stopButton').addEventListener('click', () => {
-      cancelAnimationFrame(animationId);
-    });
-
-    document.getElementById('resetButton').addEventListener('click', () => {
-      cancelAnimationFrame(animationId);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles = [];
-      let temperature = parseFloat(temperatureInput.value);
-      initializeParticles(temperature);
-      updateChart(temperature);
-    });
-
-    // 初始化调用
-    let initialTemperature = parseFloat(temperatureInput.value);
-    initializeParticles(initialTemperature);
-  </script>
+  <script src="../js/gjs/g.js"></script>
 </body>
 
 </html>

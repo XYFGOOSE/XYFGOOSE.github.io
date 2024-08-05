@@ -1,54 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>黑体辐射仿真软件</title>
     <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-            position: relative; /* 为了定位返回按钮 */
-        }
-        #controls {
-            margin: 20px;
-        }
-        #chart {
-            width: 800px;
-            height: 400px;
-        }
-        #info {
-            width: 800px;
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            text-align: left;
-        }
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #01579b;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .back-button:hover {
-            background-color: #0277bd;
-        }
-    </style>
+    <link href="../css/heatcss/heat.css" rel="stylesheet">
     <script src="../js/Yang_heat_conductionjs/echarts.min.js"></script>
+    <script src="../js/Yang_heat_conductionjs/"></script>
 </head>
+
 <body>
     <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
     <h1>黑体辐射仿真软件</h1>
@@ -64,102 +26,7 @@
         <p>黑体辐射是指理想化黑体在各个频率下的辐射强度，完全由黑体的温度决定。根据普朗克定律，黑体在特定温度下的辐射光谱可以用公式描述。</p>
         <p>可见光区位于400 nm到700 nm之间，紫外光区位于400 nm以下，而红外光区则位于700 nm以上。在高温下，黑体辐射的峰值波长会移向较短波长区域。</p>
     </div>
-    <script>
-        const temperatureSlider = document.getElementById('temperature');
-        const tempInput = document.getElementById('tempInput');
-        const tempValue = document.getElementById('tempValue');
-        const chartDom = document.getElementById('chart');
-        const myChart = echarts.init(chartDom);
-
-        const h = 6.626e-34;
-        const c = 3e8;
-        const k = 1.381e-23;
-
-        function planck(wavelength, temperature) {
-            const l = wavelength * 1e-9;
-            const a = 2 * h * c ** 2;
-            const b = h * c / (l * k * temperature);
-            return a / (l ** 5 * (Math.exp(b) - 1));
-        }
-
-        function getSeriesData(temperature) {
-            const maxWavelength = 3000; // in nm
-            const numPoints = 500;
-            const seriesData = [];
-
-            for (let i = 0; i <= numPoints; i++) {
-                const wavelength = i * maxWavelength / numPoints;
-                const intensity = planck(wavelength, temperature);
-                seriesData.push([wavelength, intensity]);
-            }
-
-            return seriesData;
-        }
-
-        function drawGraph(temperature) {
-            const seriesData = getSeriesData(temperature);
-            const option = {
-                xAxis: {
-                    type: 'value',
-                    name: '波长 (nm)',
-                    min: 0,
-                    max: 3000,
-                    axisLabel: {
-                        formatter: function (value) {
-                            return value;
-                        }
-                    }
-                },
-                yAxis: {
-                    type: 'value',
-                    name: '辐射强度',
-                    axisLabel: {
-                        formatter: function (value) {
-                            return value.toExponential(1);
-                        }
-                    }
-                },
-                visualMap: [{
-                    show: true,
-                    dimension: 0,
-                    seriesIndex: 0,
-                    pieces: [
-                        {lte: 400, color: 'rgba(75, 0, 130, 0.1)', label: '紫外光区'},
-                        {gte: 400, lte: 700, color: 'rgba(0, 255, 0, 0.1)', label: '可见光区'},
-                        {gte: 700, color: 'rgba(255, 0, 0, 0.1)', label: '红外光区'}
-                    ],
-                    orient: 'horizontal',
-                    left: 'center',
-                    bottom: '10px'
-                }],
-                series: [{
-                    data: seriesData,
-                    type: 'line',
-                    smooth: true,
-                    areaStyle: {}
-                }]
-            };
-            myChart.setOption(option);
-        }
-
-        function updateTemperature(value) {
-            tempValue.textContent = `${value} K`;
-            temperatureSlider.value = value;
-            tempInput.value = value;
-            drawGraph(value);
-        }
-
-        temperatureSlider.addEventListener('input', () => {
-            updateTemperature(temperatureSlider.value);
-        });
-
-        tempInput.addEventListener('input', () => {
-            if (tempInput.value >= 100 && tempInput.value <= 10000) {
-                updateTemperature(tempInput.value);
-            }
-        });
-
-        updateTemperature(temperatureSlider.value);
-    </script>
+    <script src="../js/Yang_heat_conductionjs/heat.js"></script>
 </body>
+
 </html>

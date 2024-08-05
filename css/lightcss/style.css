@@ -5,7 +5,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Hind', sans-serif;
+    font-family: 'Hind', sans-serif;align-items: center;
     display: flex;
     flex-direction: row;
     height: 100vh;
@@ -152,4 +152,66 @@ select, input[type="color"], input[type="range"], #output {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+/* 移动端样式 */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        overflow-y: auto;
+        font-size: 14px;
+    }
+
+    .back-button {
+        position: static;
+        width: calc(100% - 20px);
+        margin: 10px;
+        font-size: 14px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .sidebar, .interface {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .sidebar .form-container {
+        margin-top: 10px;
+    }
+
+    .sidebar .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .sidebar .form-row label {
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    .sidebar .form-row input,
+    .sidebar .form-row select {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .main-content, .canvas {
+        width: 100%;
+        padding: 0;
+        margin-top: 10px;
+    }
+
+    #renderport {
+        width: 100%;
+        height: auto;
+    }
 }

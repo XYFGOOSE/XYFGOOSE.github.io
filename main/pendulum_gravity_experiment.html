@@ -6,43 +6,12 @@
     <title>单摆测重力加速度实验</title>
     <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
     <link href="../css/pendulum_gravity_experimentcss/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background: #f0f0f0;
-            position: relative; /* 为了定位返回按钮 */
-        }
-        canvas {
-            border: 1px solid black;
-            background: #fff;
-        }
-        .back-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #01579b;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .back-button:hover {
-            background-color: #0277bd;
-        }
-    </style>
+    <link href="../css/pendulum_gravity_experimentcss/pendulum.css" rel="stylesheet">
 </head>
 <body>
     <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
     <div class="container text-center">
-        <h1 class="my-4">单摆测重力加速度实验</h1>
+        <h1 class="my-4">单摆实验</h1>
         <div class="alert alert-info">
             <p>
                 简单单摆由一质量为 m 的小球（称为摆锤）和长度为 L 的细绳组成，并固定在一个支点上。
@@ -52,10 +21,10 @@
         </div>
         <div class="mb-4">
             <label for="length" class="form-label">长度 (m):</label>
-            <input type="number" id="length" class="form-control d-inline-block w-auto" value="1" step="0.1">
+            <input type="number" id="length" class="form-control d-inline-block w-auto" value="1.6" step="0.1">
             <label for="angle" class="form-label">初始角度 (度):</label>
             <input type="number" id="angle" class="form-control d-inline-block w-auto" value="5" step="0.1" min="0" max="5">
-            <button onclick="startSimulation()" class="btn btn-primary">开始仿真</button>
+            <button id="startButton" class="btn btn-primary">开始仿真</button>
         </div>
         <canvas id="pendulumCanvas" width="600" height="400"></canvas>
         <div class="mt-4">
@@ -79,68 +48,24 @@
             </table>
         </div>
     </div>
-
-    <script>
-        const canvas = document.getElementById('pendulumCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let length, angle, gravity = 9.81;
-        let angleRad, angularVelocity = 0, angularAcceleration = 0;
-        let originX = canvas.width / 2, originY = 50;
-        let pendulumX, pendulumY;
-        let animationId;
-        let timeStep = 0.02; // 时间步长以降低动画速度
-        let damping = 0.999; // 初始阻尼较小
-        const displayAmplification = 5; // 放大系数
-
-        function startSimulation() {
-            length = parseFloat(document.getElementById('length').value);
-            angle = parseFloat(document.getElementById('angle').value);
-            if (angle > 5) {
-                alert("初始角度不能超过5°");
-                return;
-            }
-            angleRad = angle * Math.PI / 180;
-            angularVelocity = 0;
-
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-            }
-
-            calculatePeriod();
-            animate();
-        }
-
-        function calculatePeriod() {
-            const period = 2 * Math.PI * Math.sqrt(length / gravity);
-            document.getElementById('periodValue').innerText = period.toFixed(2) + ' s';
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            angularAcceleration = (-gravity / length) * Math.sin(angleRad);
-            angularVelocity += angularAcceleration * timeStep;
-            angularVelocity *= damping; // 阻尼
-            angleRad += angularVelocity * timeStep;
-
-            const displayAngleRad = angleRad * displayAmplification; // 放大显示角度
-
-            pendulumX = originX + length * 100 * Math.sin(displayAngleRad);
-            pendulumY = originY + length * 100 * Math.cos(displayAngleRad);
-
-            ctx.beginPath();
-            ctx.moveTo(originX, originY);
-            ctx.lineTo(pendulumX, pendulumY);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(pendulumX, pendulumY, 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            animationId = requestAnimationFrame(animate);
-        }
-    </script>
     <script src="../js/pendulum_gravity_experimentjs/bootstrap.bundle.min.js"></script>
+    <script src="../js/pendulum_gravity_experimentjs/pendulum.js"></script>
+    <script>
+        function isMobile() {
+            return window.matchMedia("(max-width: 767px)").matches;
+        }
+
+        function checkOrientation() {
+            const warningElement = document.getElementById('orientation-warning');
+            if (isMobile() && window.innerHeight > window.innerWidth) {
+                warningElement.style.display = 'flex';
+            } else {
+                warningElement.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('load', checkOrientation);
+        window.addEventListener('resize', checkOrientation);
+    </script>
 </body>
 </html>
