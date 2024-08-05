@@ -219,6 +219,7 @@ ul {
   margin-left: 10px;
 }
 
+<<<<<<< HEAD
 body, html {
   margin: 0;
   padding: 0;
@@ -239,6 +240,29 @@ body, html {
   width: 100%;
 }
 
+=======
+/* Footer */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1;
+}
+
+.footer {
+    background-color: var(--grey);
+    color: var(--lightblack);
+    font-size: 12px;
+    padding: 20px 0;
+    width: 100%;
+}
+
+>>>>>>> ac235720b9df0afa95a3465e575cab1ece0cf0ba
 
 .footer-inner {
   max-width: 10%;
