@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子隧穿模拟</title>
+    <link rel="stylesheet" href="../css/lzcss/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/lzcss/lz.css">
+    <link rel="icon" href="../assets/icon.svg" type="image/x-icon" />
+</head>
+<body>
+    <div class="sidebar">
+        <button class="back-button" onClick="window.location.href='box.html'">返回首页</button>
+    <div class="container">
+        <h1 class="mt-4">量子隧穿模拟</h1>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">实验简介</div>
+                    <div class="card-body">
+                        <p>量子隧穿是量子力学中的一种现象，描述了粒子通过能量障碍的过程，即使其能量低于障碍的高度。在经典物理中，这是不可能的，但在量子力学中，这种现象确实存在。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">操作指南</div>
+                    <div class="card-body">
+                        <p>使用下面的控件调整势垒高度、宽度以及波包的位置、宽度和能量，然后点击“开始模拟”按钮来观察量子隧穿现象。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="controls mt-4">
+            <div class="form-group">
+                <label for="barrierHeight">势垒高度 (eV):</label>
+                <input type="number" class="form-control" id="barrierHeight" value="5" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="barrierWidth">势垒宽度 (nm):</label>
+                <input type="number" class="form-control" id="barrierWidth" value="2" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="wavePacketPosition">波包位置 (nm):</label>
+                <input type="number" class="form-control" id="wavePacketPosition" value="-5" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="wavePacketWidth">波包宽度 (nm):</label>
+                <input type="number" class="form-control" id="wavePacketWidth" value="1" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="wavePacketEnergy">波包能量 (eV):</label>
+                <input type="number" class="form-control" id="wavePacketEnergy" value="4.98" step="0.1">
+            </div>
+            <button class="btn btn-primary" onclick="startSimulation()">开始模拟</button>
+        </div>
+        <canvas id="simulationCanvas" width="800" height="400" class="mt-4"></canvas>
+    </div>
+    <script src="../js/lzjs/lz.js"></script>
+</body>
+</html>
